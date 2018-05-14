@@ -82,7 +82,7 @@ class MyLogger:
     def __init__(self):
         program_path = os.path.dirname(os.path.realpath(__file__))
         self._logger = logging.getLogger('teleinfo')
-        hdlr = logging.FileHandler(program_path + '/../../../log/teleinfo_deamon')
+        hdlr = logging.FileHandler(program_path + '/../../../log/Teleinfo_deamon')
         formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
         hdlr.setFormatter(formatter)
         self._logger.addHandler(hdlr)
@@ -407,7 +407,7 @@ class Teleinfo(object):
                         cpt2_data[cle] = valeur
 
             if self._externalip != "":
-                self.cmd = self._externalip +'/plugins/teleinfo/core/php/jeeTeleinfo.php?api=' + self._cleAPI
+                self.cmd = self._externalip +'/plugins/Teleinfo/core/php/jeeTeleinfo.php?api=' + self._cleAPI
                 separateur = "&"
             else:
                 self.cmd = 'nice -n 19 timeout 15 /usr/bin/php ' + self._realpath + '/../php/jeeTeleinfo.php api=' + self._cleAPI
@@ -528,7 +528,7 @@ def main():
     else:
         teleinfo = Teleinfo("")
     pid = str(os.getpid())
-    file("/tmp/teleinfo2cpt.pid", 'w').write("%s\n" % pid)
+    file("/tmp/Teleinfo2cpt.pid", 'w').write("%s\n" % pid)
     signal.signal(signal.SIGTERM, teleinfo.exit_handler)
     teleinfo.readMeter(gDeviceName, global_external_ip, global_cle_api, global_debug, global_real_path)
     if ftdi_type == 0:

@@ -22,19 +22,19 @@ if (!isConnect()) {
     die();
 }
 
-$port = config::byKey('port', 'teleinfo');
+$port = config::byKey('port', 'Teleinfo');
 $core_version = '1.1.1';
 if (!file_exists(dirname(__FILE__) . '/info.json')) {
-    log::add('teleinfo','warning','Pas de fichier info.json');
+    log::add('Teleinfo','warning','Pas de fichier info.json');
 }
 $data = json_decode(file_get_contents(dirname(__FILE__) . '/info.json'), true);
 if (!is_array($data)) {
-    log::add('teleinfo','warning','Impossible de décoder le fichier info.json');
+    log::add('Teleinfo','warning','Impossible de décoder le fichier info.json');
 }
 try {
     $core_version = $data['pluginVersion'];
 } catch (\Exception $e) {
-    log::add('teleinfo','warning','Impossible de récupérer la version.');
+    log::add('Teleinfo','warning','Impossible de récupérer la version.');
 }
 ?>
 
@@ -252,13 +252,13 @@ try {
 <script>
         $('#btn_diagnostic').on('click',function(){
             $('#md_modal').dialog({title: "{{Diagnostique de résolution d'incident}}"});
-            $('#md_modal').load('index.php?v=d&plugin=teleinfo&modal=diagnostic').dialog('open');
+            $('#md_modal').load('index.php?v=d&plugin=Teleinfo&modal=diagnostic').dialog('open');
         });
 
         $('#bt_stopTeleinfoDeamon').on('click', function () {
             $.ajax({// fonction permettant de faire de l'ajax
                 type: "POST", // methode de transmission des données au fichier php
-                url: "plugins/teleinfo/core/ajax/teleinfo.ajax.php", // url du fichier php
+                url: "plugins/Teleinfo/core/ajax/Teleinfo.ajax.php", // url du fichier php
                 data: {
                     action: "stopDeamon",
                 },
@@ -272,7 +272,7 @@ try {
                     return;
                 }
                 $('#div_alert').showAlert({message: 'Le daemon a été correctement arrêté : il se relancera automatiquement dans 1 minute', level: 'success'});
-                $('#ul_plugin .li_plugin[data-plugin_id=teleinfo]').click();
+                $('#ul_plugin .li_plugin[data-plugin_id=Teleinfo]').click();
             }
             });
         });
@@ -280,7 +280,7 @@ try {
         $('#bt_restartTeleinfoDeamon').on('click', function () {
         $.ajax({// fonction permettant de faire de l'ajax
             type: "POST", // methode de transmission des données au fichier php
-            url: "plugins/teleinfo/core/ajax/teleinfo.ajax.php", // url du fichier php
+            url: "plugins/Teleinfo/core/ajax/Teleinfo.ajax.php", // url du fichier php
             data: {
                 action: "restartDeamon",
             },
@@ -294,7 +294,7 @@ try {
                 return;
             }
             $('#div_alert').showAlert({message: '{{Le démon a été correctement (re)démaré}}', level: 'success'});
-            $('#ul_plugin .li_plugin[data-plugin_id=teleinfo]').click();
+            $('#ul_plugin .li_plugin[data-plugin_id=Teleinfo]').click();
             }
         });
         });

@@ -7,10 +7,18 @@ Change log
 A venir
 =====
 - Docs au nouveau standard (github pages)
-- Refaire fonctionner le mode 2 compteurs.
 - Noms des variables et fonctions
 
-3.0.2 Stable [![Stable](https://img.shields.io/badge/version-stable-brightgreen.svg?longCache=true&style=flat-square)](https://github.com/NextDom/plugin-teleinfo/releases)
+4.0.0 Stable [![Stable](https://img.shields.io/badge/version-stable-brightgreen.svg?longCache=true&style=flat-square)](https://github.com/NextDom/plugin-teleinfo/releases)
+=====
+- Changement id du plugin
+
+3.1.1
+=====
+- Dernière Livraison market Jeedom
+- Refaire fonctionner le mode 2 compteurs.
+
+3.0.2
 =====
 - Droits sur le port
 

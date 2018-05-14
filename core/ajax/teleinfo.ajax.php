@@ -25,24 +25,6 @@ try {
     }
 
     switch (init('action')){
-        case 'stopDeamon':
-            teleinfo::deamon_stop();
-            ajax::success();
-        break;
-        case 'restartDeamon':
-            $port                 = config::byKey('port', 'teleinfo', 'none');
-            $_2cpt_cartelectronic = config::byKey('2cpt_cartelectronic', 'teleinfo');
-            if ($port == 'none') {
-                ajax::success();
-            }
-            teleinfo::deamon_stop();
-            if (teleinfo::deamonRunning()) {
-                throw new \Exception(__('Impossible d\'arrêter le démon', __FILE__));
-            }
-            log::clear('teleinfocmd');
-            teleinfo::cron();
-            ajax::success();
-        break;
         case 'getTeleinfo':
             if (init('object_id') == '') {
                 $_GET['object_id'] = $_SESSION['user']->getOptions('defaultDashboardObject');
@@ -69,7 +51,7 @@ try {
             }
             $return['date'] = $date;
             foreach ($object->getEqLogic() as $eqLogic) {
-                if ($eqLogic->getIsVisible() == '1' && $eqLogic->getEqType_name() == 'teleinfo') {
+                if ($eqLogic->getIsVisible() == '1' && $eqLogic->getEqType_name() == 'Teleinfo') {
                     $return['eqLogics'][] = array('eqLogic' => utils::o2a($eqLogic), 'html' => $eqLogic->toHtml(init('version')));
                 }
             }
@@ -88,7 +70,7 @@ try {
                 }
                 ajax::success($return);
             } else {
-                $eqLogics = eqLogic::byType('teleinfo');
+                $eqLogics = eqLogic::byType('Teleinfo');
                 foreach ($eqLogics as $eqLogic) {
                     $return[$eqLogic->getId()]        = utils::o2a($eqLogic);
                     $return[$eqLogic->getId()]['cmd'] = array();
@@ -103,13 +85,13 @@ try {
         break;
         case 'getHealth':
             if (init('eqLogicID') !== null) {
-                $teleinfo       = teleinfo::byLogicalId(init('eqLogicID'), 'teleinfo');
+                $teleinfo       = Teleinfo::byLogicalId(init('eqLogicID'), 'Teleinfo');
                 $health_cmd     = $teleinfo->getCmd('info', 'health');
                 $return         = array('object' => utils::o2a($health_cmd));
                 $return["ADCO"] = init('eqLogicID');
                 ajax::success($return);
             } else {
-                $teleinfo = teleinfo::byType('teleinfo');
+                $teleinfo = Teleinfo::byType('Teleinfo');
                 foreach ($teleinfo as $eqLogic) {
                     $health_cmd     = $eqLogic->getCmd('info', 'health');
                     $return         = array('object' => utils::o2a($health_cmd));
@@ -119,42 +101,6 @@ try {
             }
 
             ajax::error("", "");
-        break;
-        case 'getInfoDaemon':
-            $return   = array();
-            $_nbLines = 1000;
-            $replace  = array(
-                '&gt;'   => '>',
-                '&apos;' => '',
-            );
-            $page     = array();
-
-            $path = realpath(dirname(__FILE__) . '/../../ressources/teleinfo.log');
-            if (!file_exists($path)) {
-                $return['result'] = array('Deamon non lancé');
-                ajax::success($return);
-            } else {
-                $log = new SplFileObject($path);
-                if ($log) {
-                    $log->seek(0); //Seek to the begening of lines
-                    $linesRead = 0;
-                    while ($log->valid() && $linesRead != $_nbLines) {
-                        $line = trim($log->current()); //get current line
-                        if ($line != '') {
-                            array_unshift($page, $line);
-                        }
-                        $log->next(); //go to next line
-                        $linesRead++;
-                    }
-                }
-                $return['result'] = $page;
-                ajax::success($return);
-            }
-        break;
-        case 'getInfoExternalDaemon':
-            $jeeNetwork = jeeNetwork::byPlugin('enocean');
-            $return['result'] = $jeeNetwork;
-            ajax::success($return);
         break;
         case 'getHistory':
             $return = array();
@@ -169,9 +115,9 @@ try {
         case 'diagnostic_step1':
             $return = array();
 
-            $return['portName'] = config::byKey('port', 'teleinfo');
+            $return['portName'] = config::byKey('port', 'Teleinfo');
             if ($return['portName'] == "serie") {
-                $return['portName'] = config::byKey('modem_serie_addr', 'teleinfo');
+                $return['portName'] = config::byKey('modem_serie_addr', 'Teleinfo');
             }
             if ($return['portName'] === ""){
                 $return['result'] = '0';
@@ -180,10 +126,10 @@ try {
                 $return['result'] = '1';
             }
             $return['message'] = "Modem configuré : " . $return['portName'];
-            $return['test'] = jeedom::getTmpFolder("teleinfo");
+            $return['test'] = jeedom::getTmpFolder("Teleinfo");
             try {
-                //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/teleinfo_diag.txt';
-                $diagnosticFile = jeedom::getTmpFolder("teleinfo") . '/teleinfo_diag.txt';
+                //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/Teleinfo_diag.txt';
+                $diagnosticFile = jeedom::getTmpFolder("Teleinfo") . '/Teleinfo_diag.txt';
                 exec('rm ' . $diagnosticFile);
                 file_put_contents($diagnosticFile, serialize(date('Y-m-d H:i:s')), FILE_APPEND | LOCK_EX);
                 file_put_contents($diagnosticFile, serialize('||STEP_1||'), FILE_APPEND | LOCK_EX);
@@ -195,9 +141,9 @@ try {
         break;
         case 'diagnostic_step2':
             $return = array();
-            $return['portName'] = config::byKey('port', 'teleinfo');
+            $return['portName'] = config::byKey('port', 'Teleinfo');
             if ($return['portName'] == "serie") {
-                $return['portName'] = config::byKey('modem_serie_addr', 'teleinfo');
+                $return['portName'] = config::byKey('modem_serie_addr', 'Teleinfo');
             }
             $return['portAddress'] = jeedom::getUsbMapping($return['portName']);
             $return['portAvailable'] = file_exists($return['portAddress']);
@@ -210,8 +156,8 @@ try {
                 $return['message'] = 'Accès OK';
             }
             try {
-                //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/teleinfo_diag.txt';
-                $diagnosticFile = jeedom::getTmpFolder("teleinfo") . '/teleinfo_diag.txt';
+                //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/Teleinfo_diag.txt';
+                $diagnosticFile = jeedom::getTmpFolder("Teleinfo") . '/Teleinfo_diag.txt';
                 file_put_contents($diagnosticFile, serialize('||STEP_2||'), FILE_APPEND | LOCK_EX);
                 file_put_contents($diagnosticFile, serialize($return), FILE_APPEND | LOCK_EX);
             } catch (\Exception $e) {}
@@ -229,8 +175,8 @@ try {
                 $return['message'] = 'OK';
             }
             try {
-                //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/teleinfo_diag.txt';
-                $diagnosticFile = jeedom::getTmpFolder("teleinfo") . '/teleinfo_diag.txt';
+                //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/Teleinfo_diag.txt';
+                $diagnosticFile = jeedom::getTmpFolder("Teleinfo") . '/Teleinfo_diag.txt';
                 file_put_contents($diagnosticFile, serialize('||STEP_3||'), FILE_APPEND | LOCK_EX);
                 file_put_contents($diagnosticFile, serialize($return), FILE_APPEND | LOCK_EX);
             } catch (\Exception $e) {}
@@ -238,17 +184,17 @@ try {
         break;
         case 'diagnostic_step4':
             $return = array();
-            $modemSerieAddr       = config::byKey('port', 'teleinfo');
-            $twoCptCartelectronic = config::byKey('2cpt_cartelectronic', 'teleinfo');
-            if (config::byKey('modem_vitesse', 'teleinfo') == "") {
+            $modemSerieAddr       = config::byKey('port', 'Teleinfo');
+            $twoCptCartelectronic = config::byKey('2cpt_cartelectronic', 'Teleinfo');
+            if (config::byKey('modem_vitesse', 'Teleinfo') == "") {
                 $modemVitesse = '1200';
             } else {
-                $modemVitesse = config::byKey('modem_vitesse', 'teleinfo');
+                $modemVitesse = config::byKey('modem_vitesse', 'Teleinfo');
             }
             if ($modemSerieAddr == "serie") {
-                $port = config::byKey('modem_serie_addr', 'teleinfo');
+                $port = config::byKey('modem_serie_addr', 'Teleinfo');
             } else {
-                $port = jeedom::getUsbMapping(config::byKey('port', 'teleinfo'));
+                $port = jeedom::getUsbMapping(config::byKey('port', 'Teleinfo'));
             }
             if ($twoCptCartelectronic == 1) {
                 $return['result'] = '2';
@@ -268,8 +214,8 @@ try {
                 $return['message'] = 'NOK';
             }
             try {
-                //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/teleinfo_diag.txt';
-                $diagnosticFile = jeedom::getTmpFolder("teleinfo") . '/teleinfo_diag.txt';
+                //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/Teleinfo_diag.txt';
+                $diagnosticFile = jeedom::getTmpFolder("Teleinfo") . '/Teleinfo_diag.txt';
                 file_put_contents($diagnosticFile, serialize('||STEP_4||'), FILE_APPEND | LOCK_EX);
                 file_put_contents($diagnosticFile, serialize($return), FILE_APPEND | LOCK_EX);
             } catch (\Exception $e) {}
@@ -281,8 +227,8 @@ try {
             $return['launch_url'] = parse_url(config::byKey('internalProtocol', 'core', 'http://') . config::byKey('internalAddr', 'core', '127.0.0.1') . ":" . config::byKey('internalPort', 'core', '80') . config::byKey('internalComplement', 'core'));
             $return['result'] = '1';
             try {
-                //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/teleinfo_diag.txt';
-                $diagnosticFile = jeedom::getTmpFolder("teleinfo") . '/teleinfo_diag.txt';
+                //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/Teleinfo_diag.txt';
+                $diagnosticFile = jeedom::getTmpFolder("Teleinfo") . '/Teleinfo_diag.txt';
                 file_put_contents($diagnosticFile, serialize('||STEP_5||'), FILE_APPEND | LOCK_EX);
                 file_put_contents($diagnosticFile, serialize($return), FILE_APPEND | LOCK_EX);
             } catch (\Exception $e) {}
@@ -290,13 +236,13 @@ try {
         break;
         case 'diagnostic_step6':
             $return = array();
-            //$monfichier = dirname(__FILE__) . '/../../../../tmp/teleinfo_export.txt';
-            $monfichier = jeedom::getTmpFolder("teleinfo") . '/teleinfo_export.txt';
-            //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/teleinfo_diag.txt';
-            $diagnosticFile = jeedom::getTmpFolder("teleinfo") . '/teleinfo_diag.txt';
+            //$monfichier = dirname(__FILE__) . '/../../../../tmp/Teleinfo_export.txt';
+            $monfichier = jeedom::getTmpFolder("Teleinfo") . '/Teleinfo_export.txt';
+            //$diagnosticFile = dirname(__FILE__) . '/../../../../tmp/Teleinfo_diag.txt';
+            $diagnosticFile = jeedom::getTmpFolder("Teleinfo") . '/Teleinfo_diag.txt';
             exec('rm ' . $monfichier);
             file_put_contents($monfichier, serialize(date('Y-m-d H:i:s')), FILE_APPEND | LOCK_EX);
-            foreach (eqLogic::byType('teleinfo') as $eqLogic) {
+            foreach (eqLogic::byType('Teleinfo') as $eqLogic) {
                 //file_put_contents($monfichier, $eqLogic->getConfiguration(), FILE_APPEND | LOCK_EX);
                 file_put_contents($monfichier, serialize('||EQLOGIC_NEW||'), FILE_APPEND | LOCK_EX);
                 file_put_contents($monfichier, $eqLogic->getName() . ";", FILE_APPEND | LOCK_EX);
@@ -309,16 +255,16 @@ try {
                 }
                 file_put_contents($monfichier, serialize('||EQLOGIC_END||'), FILE_APPEND | LOCK_EX);
             }
-            //$return["files"] = log::getPathToLog('teleinfo'). " " . log::getPathToLog('teleinfo_deamon'). " " . log::getPathToLog('teleinfo_update') . " " . dirname(__FILE__) . '/../../plugin_info/info.json'. " " . dirname(__FILE__) . '/../../../../tmp/teleinfo_export.txt' . " " . dirname(__FILE__) . '/../../../../tmp/teleinfo_diag.txt';
-            $return["files"] = log::getPathToLog('teleinfo'). " " . log::getPathToLog('teleinfo_deamon'). " " . log::getPathToLog('teleinfo_update') . " " . dirname(__FILE__) . '/../../plugin_info/info.json'. " " . $diagnosticFile  . " " . $monfichier;
-            $return["path"] = dirname(__FILE__) . '/../../../../tmp/teleinfolog.tar';
-            //$return["path"] = jeedom::getTmpFolder("teleinfo") . '/teleinfolog.tar';
-            exec('rm ' . dirname(__FILE__) . '/../../../../tmp/teleinfolog.tar');
-            //exec('rm ' . jeedom::getTmpFolder("teleinfo") . '/teleinfolog.tar');
-            $return["compress"] = exec('tar -cvf ' . dirname(__FILE__) . '/../../../../tmp/teleinfolog.tar ' . $return["files"]);
-            //$return["compress"] = exec('tar -cvf ' . jeedom::getTmpFolder("teleinfo") . '/teleinfolog.tar ' . $return["files"]);
-            $return['message'] = '<a class="btn btn-success" href="core/php/downloadFile.php?pathfile=tmp/teleinfolog.tar" target="_blank">Télécharger le package</a>';
-            //$return['message'] = '<a class="btn btn-success" href="core/php/downloadFile.php?pathfile='.jeedom::getTmpFolder("teleinfo") . '/teleinfolog.tar" target="_blank">Télécharger le package</a>';
+            //$return["files"] = log::getPathToLog('Teleinfo'). " " . log::getPathToLog('Teleinfo_deamon'). " " . log::getPathToLog('Teleinfo_update') . " " . dirname(__FILE__) . '/../../plugin_info/info.json'. " " . dirname(__FILE__) . '/../../../../tmp/Teleinfo_export.txt' . " " . dirname(__FILE__) . '/../../../../tmp/Teleinfo_diag.txt';
+            $return["files"] = log::getPathToLog('Teleinfo'). " " . log::getPathToLog('Teleinfo_deamon'). " " . log::getPathToLog('Teleinfo_update') . " " . dirname(__FILE__) . '/../../plugin_info/info.json'. " " . $diagnosticFile  . " " . $monfichier;
+            $return["path"] = dirname(__FILE__) . '/../../../../tmp/Teleinfolog.tar';
+            //$return["path"] = jeedom::getTmpFolder("Teleinfo") . '/Teleinfolog.tar';
+            exec('rm ' . dirname(__FILE__) . '/../../../../tmp/Teleinfolog.tar');
+            //exec('rm ' . jeedom::getTmpFolder("Teleinfo") . '/Teleinfolog.tar');
+            $return["compress"] = exec('tar -cvf ' . dirname(__FILE__) . '/../../../../tmp/Teleinfolog.tar ' . $return["files"]);
+            //$return["compress"] = exec('tar -cvf ' . jeedom::getTmpFolder("Teleinfo") . '/Teleinfolog.tar ' . $return["files"]);
+            $return['message'] = '<a class="btn btn-success" href="core/php/downloadFile.php?pathfile=tmp/Teleinfolog.tar" target="_blank">Télécharger le package</a>';
+            //$return['message'] = '<a class="btn btn-success" href="core/php/downloadFile.php?pathfile='.jeedom::getTmpFolder("Teleinfo") . '/Teleinfolog.tar" target="_blank">Télécharger le package</a>';
             $return['result'] = '2';
             ajax::success($return);
         break;

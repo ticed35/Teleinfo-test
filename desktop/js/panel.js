@@ -22,7 +22,7 @@ $(".in_datepicker").datepicker();
 
 $('#bt_teleinfoPanelSante').on('click', function() {
     $('#md_modal').dialog({title: "{{Santé}}"});
-    $('#md_modal').load('index.php?v=d&plugin=teleinfo&modal=panel_sante').dialog('open');
+    $('#md_modal').load('index.php?v=d&plugin=Teleinfo&modal=panel_sante').dialog('open');
 });
 
 $( "#eqlogic_select" ).change(function() {
@@ -47,7 +47,7 @@ loadData();
 function loadData(){
 $.ajax({
         type: 'POST',
-        url: 'plugins/teleinfo/core/ajax/teleinfo.ajax.php',
+        url: 'plugins/Teleinfo/core/ajax/Teleinfo.ajax.php',
         data: {
             action: 'getInformation',
             eqLogic_id: globalEqLogic,
@@ -200,7 +200,7 @@ function getTeleinfoCmdValue(cmd) {
     $.ajax({
         type: 'POST',
         async:true,
-        url: 'plugins/teleinfo/core/ajax/teleinfo.ajax.php',
+        url: 'plugins/Teleinfo/core/ajax/Teleinfo.ajax.php',
         data: {
             action:'getValue',
             id:object.id
@@ -220,7 +220,7 @@ function getTeleinfoObjectHistory(div, type, object) {
     $.ajax({
         type: 'POST',
         async:true,
-        url: 'plugins/teleinfo/core/ajax/teleinfo.ajax.php',
+        url: 'plugins/Teleinfo/core/ajax/Teleinfo.ajax.php',
         data: {
             action:'getHistory',
             id:object.id,

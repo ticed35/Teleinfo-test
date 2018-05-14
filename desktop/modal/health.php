@@ -39,4 +39,4 @@ if (!isConnect('admin')) {
 	</tbody>
 </table>
 
-<?php include_file('desktop', 'health', 'js', 'teleinfo');?>
+<?php include_file('desktop', 'health.Teleinfo', 'js', 'Teleinfo');?>

@@ -22,7 +22,7 @@ $('#bt_stopTeleinfoDaemon').on('click', function() {
 function stopTeleinfoDeamon() {
     $.ajax({// fonction permettant de faire de l'ajax
         type: "POST", // methode de transmission des données au fichier php
-        url: "plugins/teleinfo/core/ajax/teleinfo.ajax.php", // url du fichier php
+        url: "plugins/Teleinfo/core/ajax/Teleinfo.ajax.php", // url du fichier php
         data: {
             action: "stopDeamon",
         },
@@ -47,18 +47,12 @@ $('#create_data_teleinfo').on('click', function() {
 
 $('#bt_cout').on('click', function() {
     $('#md_modal').dialog({title: "{{Gestion des coûts}}"});
-    $('#md_modal').load('index.php?v=d&plugin=teleinfo&modal=cout').dialog('open');
+    $('#md_modal').load('index.php?v=d&plugin=Teleinfo&modal=cout').dialog('open');
 });
 
 $('#bt_info_daemon').on('click', function() {
     $('#md_modal').dialog({title: "{{Informations du modem}}"});
-    $('#md_modal').load('index.php?v=d&plugin=teleinfo&modal=info_daemon&plugin_id=teleinfo_deamon&slave_id=0').dialog('open');
-});
-
-$('.bt_info_external_daemon').on('click', function() {
-    var slave_id_tmp = $(this).attr('slave_id');
-    $('#md_modal').dialog({title: "{{Informations du modem}}"});
-    $('#md_modal').load('index.php?v=d&plugin=teleinfo&modal=info_daemon&plugin_id=teleinfo_deamon&slave_id=' + slave_id_tmp).dialog('open');
+    $('#md_modal').load('index.php?v=d&plugin=Teleinfo&modal=info_daemon&plugin_id=teleinfo_deamon&slave_id=0').dialog('open');
 });
 
 
@@ -69,7 +63,7 @@ $('#bt_config').on('click', function() {
 
 $('#bt_teleinfoHealth').on('click', function() {
     $('#md_modal').dialog({title: "{{Santé Téléinformation}}"});
-    $('#md_modal').load('index.php?v=d&plugin=teleinfo&modal=health').dialog('open');
+    $('#md_modal').load('index.php?v=d&plugin=Teleinfo&modal=health').dialog('open');
 });
 
 

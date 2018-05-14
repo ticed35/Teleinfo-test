@@ -41,7 +41,7 @@ class MyLogger:
     def __init__(self):
         program_path = os.path.dirname(os.path.realpath(__file__))
         self._logger = logging.getLogger('teleinfo')
-        hdlr = logging.FileHandler(program_path + '/../../../log/teleinfo_deamon')
+        hdlr = logging.FileHandler(program_path + '/../../../log/Teleinfo_deamon')
         formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
         hdlr.setFormatter(formatter)
         self._logger.addHandler(hdlr)
@@ -321,7 +321,7 @@ class Teleinfo:
                     valeur = valeur.replace(" ", "%20")
                     data[cle] = valeur
             if self._externalip != "":
-                self.cmd = "curl -L -s -G --max-time 8 " + self._externalip +"/plugins/teleinfo/core/php/jeeTeleinfo.php -d 'api=" + self._cleApi
+                self.cmd = "curl -L -s -G --max-time 8 " + self._externalip +"/plugins/Teleinfo/core/php/jeeTeleinfo.php -d 'api=" + self._cleApi
                 separateur = "&"
             else:
                 self.cmd = 'nice -n 19 timeout 8 /usr/bin/php ' + self._realpath + '/../php/jeeTeleinfo.php api=' + self._cleApi
@@ -434,8 +434,8 @@ if __name__ == "__main__":
     if options.force:
         try:
             if options.force == '0':
-                if os.path.isfile("/tmp/teleinfo_" + options.type + ".pid"):
-                    filetmp = open("/tmp/teleinfo_" + options.type + ".pid", 'r')
+                if os.path.isfile("/tmp/Teleinfo_" + options.type + ".pid"):
+                    filetmp = open("/tmp/Teleinfo_" + options.type + ".pid", 'r')
                     filepid = filetmp.readline()
                     filetmp.close()
                     if filepid != "":
@@ -447,7 +447,7 @@ if __name__ == "__main__":
             raise TeleinfoException(error)
     if global_can_start == 'true':
         pid = str(os.getpid())
-        file("/tmp/teleinfo_" + options.type + ".pid", 'w').write("%s\n" % pid)
+        file("/tmp/Teleinfo_" + options.type + ".pid", 'w').write("%s\n" % pid)
         teleinfo = Teleinfo(global_device_name, global_external_ip, global_api, global_debug, global_real_path, global_vitesse, global_mode)
         signal.signal(signal.SIGTERM, teleinfo.exit_handler)
         teleinfo.run()

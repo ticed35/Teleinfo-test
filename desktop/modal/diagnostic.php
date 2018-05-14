@@ -194,5 +194,5 @@ if (!isConnect('admin')) {
     </form>
 </div>
 
-<?php include_file('desktop', 'diagnostic', 'js', 'teleinfo');?>
-<?php include_file('desktop', 'diagnostic', 'css', 'teleinfo');?>
+<?php include_file('desktop', 'diagnostic.Teleinfo', 'js', 'Teleinfo');?>
+<?php include_file('desktop', 'diagnostic.Teleinfo', 'css', 'Teleinfo');?>

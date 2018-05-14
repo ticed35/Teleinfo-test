@@ -63,11 +63,11 @@ if (!isConnect('admin')) {
 <a class="btn btn-success" id="bt_teleinfoSaveCout"><i class='fa fa-floppy-o'></i> {{Enregistrer}}</a>
 </div>
 
- 
+
 </div>
 
 
 
 
 
-<?php include_file('desktop', 'cout', 'js', 'teleinfo');?>
+<?php include_file('desktop', 'cout', 'js', 'Teleinfo');?>

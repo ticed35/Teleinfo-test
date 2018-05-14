@@ -12,7 +12,7 @@ var app_console = {
 		$.ajax({
 		async:true,
 		global : false,
-        url: 'plugins/teleinfo/core/ajax/teleinfo.ajax.php',
+        url: 'plugins/Teleinfo/core/ajax/Teleinfo.ajax.php',
         data: {
 			action:'getInfoDaemon'
 			},
@@ -36,6 +36,6 @@ var app_console = {
 			$('#log').scrollTop(h);
         }
 		});
-	
+
 	}
 }

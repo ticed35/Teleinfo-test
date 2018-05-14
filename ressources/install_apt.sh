@@ -1,5 +1,5 @@
 #!/bin/bash
-PROGRESS_FILE=/tmp/jeedom/teleinfo/dependance
+PROGRESS_FILE=/tmp/jeedom/Teleinfo/dependance
 PROGRESS_FILE=$1
 touch ${PROGRESS_FILE}
 echo 0 > ${PROGRESS_FILE}

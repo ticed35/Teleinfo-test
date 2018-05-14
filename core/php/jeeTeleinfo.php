@@ -108,32 +108,32 @@ if($message != ''){
     $text = substr($message, 0, -2);
     $messages = preg_split("#(&|[\*]{2})#", $text);
     foreach ($messages as $key => $value){
-        log::add('teleinfo', 'event', 'Log Daemon : ' . $value);
+        log::add('Teleinfo', 'event', 'Log Daemon : ' . $value);
         $text = $text . date("Y-m-d H:i:s") . " " .  $value . "</br>";
     }
-    $cache = cache::byKey('teleinfo::console', false);
-    cache::set('teleinfo::console', $cache->getValue("") . $text, 1440);
+    $cache = cache::byKey('Teleinfo::console', false);
+    cache::set('Teleinfo::console', $cache->getValue("") . $text, 1440);
     die();
 }
 
 if ($adco == '' && $adsc == ''){
-    log::add('teleinfo', 'info', 'Pas d\'ADCO/ADSC dans la trame');
+    log::add('Teleinfo', 'info', 'Pas d\'ADCO/ADSC dans la trame');
     die();
 }
 
 if ($adco != '')
 {
-    $teleinfo = teleinfo::byLogicalId($adco, 'teleinfo');
+    $teleinfo = Teleinfo::byLogicalId($adco, 'Teleinfo');
 }
 else
 {
-    $teleinfo = teleinfo::byLogicalId($adsc, 'teleinfo');
+    $teleinfo = Teleinfo::byLogicalId($adsc, 'Teleinfo');
 }
 
 if (!is_object($teleinfo)) {
-    $teleinfo = ($adco != '') ? teleinfo::createFromDef($adco) : teleinfo::createFromDef($adsc);
+    $teleinfo = ($adco != '') ? Teleinfo::createFromDef($adco) : Teleinfo::createFromDef($adsc);
     if (!is_object($teleinfo)) {
-        log::add('teleinfo', 'info', 'Aucun équipement trouvé pour le compteur n°' . $adco . $adsc);
+        log::add('Teleinfo', 'info', 'Aucun équipement trouvé pour le compteur n°' . $adco . $adsc);
         die();
     }
 }
@@ -152,7 +152,7 @@ foreach ($myDatas as $key => $value){
         $cmd = $teleinfo->getCmd('info',$key);
         if ($cmd === false) {
             if($key != 'api' && $key != 'ADCO'){
-                teleinfo::createCmdFromDef($teleinfo->getLogicalId(), $key, $value);
+                Teleinfo::createCmdFromDef($teleinfo->getLogicalId(), $key, $value);
                 if($healthEnable) {
                     $healthCmd->setConfiguration($key, array("name" => $key, "value" => $value, "update_time" => date("Y-m-d H:i:s")));
                     $healthCmd->save();
@@ -168,4 +168,4 @@ foreach ($myDatas as $key => $value){
         }
     }
 }
-log::add('teleinfo', 'debug', 'Reception de : ' . $sentDatas);
+log::add('Teleinfo', 'debug', 'Reception de : ' . $sentDatas);

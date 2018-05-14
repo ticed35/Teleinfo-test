@@ -6,9 +6,9 @@ $date = array(
 	'start' => date('Y-m-d', strtotime(config::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
 	'end' => date('Y-m-d'),
 );
-sendVarToJS('eqType', 'teleinfo');
+sendVarToJS('eqType', 'Teleinfo');
 sendVarToJs('object_id', init('object_id'));
-$eqLogics = eqLogic::byType('teleinfo');
+$eqLogics = eqLogic::byType('Teleinfo');
 
 ?>
 
@@ -119,4 +119,4 @@ $eqLogics = eqLogic::byType('teleinfo');
 	</div>
 </div>
 
-<?php include_file('desktop', 'panel', 'js', 'teleinfo'); ?>
+<?php include_file('desktop', 'panel', 'js', 'Teleinfo'); ?>

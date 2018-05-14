@@ -26,18 +26,18 @@ $params = $jsonrpc->getParams();
 
 switch ($jsonrpc->getMethod()) {
     case 'deamonRunning':
-        $jsonrpc->makeSuccess(teleinfo::deamonRunning());
+        $jsonrpc->makeSuccess(Teleinfo::deamonRunning());
     break;
     case 'stopDeamon':
-        $jsonrpc->makeSuccess(teleinfo::deamon_stop());
+        $jsonrpc->makeSuccess(Teleinfo::deamon_stop());
     break;
     case 'restartDeamon':
-    teleinfo::deamon_stop();
-    if (teleinfo::deamonRunning()) {
+    Teleinfo::deamon_stop();
+    if (Teleinfo::deamonRunning()) {
         throw new \Exception(__('Impossible d\'arrêter le démon', __FILE__));
     }
-    log::clear('teleinfocmd');
-    teleinfo::cron();
+    log::clear('Teleinfocmd');
+    Teleinfo::cron();
     $jsonrpc->makeSuccess();
     break;
 }
